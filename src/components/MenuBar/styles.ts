@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  margin-left: 128px;
-  border-right: 1px solid ${({ theme }) => theme.colors.darkGray};
   padding: 24px 16px 24px 0;
   display: flex;
   flex-direction: column;
