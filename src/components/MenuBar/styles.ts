@@ -13,7 +13,11 @@ export const Menu = styled.div`
 `;
 
 export const Icon = styled.div`
-  font-size: 32px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
   padding: 0 16px;
 `;
 

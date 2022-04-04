@@ -1,16 +1,16 @@
-import { ReactChild } from 'react';
-
+import { ReactChild, ReactElement } from 'react';
+import { IconType } from 'react-icons/lib';
 import { Container } from './styles';
 
 interface IMenuGroup {
   children: ReactChild;
-  icon: string
+  icon: ReactElement<IconType>
 }
 
 export function MenuGroup({ children, icon }: IMenuGroup) {
   return (
     <Container>
-      <i className={icon} />
+      {icon}
       <span>{children}</span>
     </Container>
   );

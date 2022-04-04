@@ -1,4 +1,7 @@
 import {
+  FaHome, FaBell, FaReact, FaEnvelope, FaUserAlt,
+} from 'react-icons/fa';
+import {
   Container, Menu, Icon, Profile,
 } from './styles';
 
@@ -10,18 +13,15 @@ export default function MenuBar() {
     <Container>
       <div>
         <Icon>
-          <i className="fab fa-twitter" />
+          <FaReact size={22} />
+          Reactwitter
         </Icon>
 
         <Menu>
-          <MenuGroup icon="fas fa-home">Home</MenuGroup>
-          <MenuGroup icon="fas fa-hashtag">Explore</MenuGroup>
-          <MenuGroup icon="fas fa-bell">Notifications</MenuGroup>
-          <MenuGroup icon="fas fa-envelope">Messages</MenuGroup>
-          <MenuGroup icon="fas fa-bookmark">Bookmarks</MenuGroup>
-          <MenuGroup icon="fas fa-list">Lists</MenuGroup>
-          <MenuGroup icon="fas fa-user">Profile</MenuGroup>
-          <MenuGroup icon="fas fa-ellipsis-h">More</MenuGroup>
+          <MenuGroup icon={<FaHome size={22} />}>Home</MenuGroup>
+          <MenuGroup icon={<FaBell size={22} />}>Notifications</MenuGroup>
+          <MenuGroup icon={<FaEnvelope size={22} />}>Messages</MenuGroup>
+          <MenuGroup icon={<FaUserAlt size={22} />}>Profile</MenuGroup>
         </Menu>
 
         <TweetButton
