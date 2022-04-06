@@ -1,10 +1,45 @@
+/* eslint-disable no-unused-vars */
+import { useEffect, useState } from 'react';
+
 import Tweet from '../Tweet';
 import TweetButton from '../TweetButton';
+import httpClient from '../../services/utils/httpClient';
+
 import {
-  Container, TweetActions, NewTweetContainer, PageTitle, TweetList,
+  Container,
+  TweetActions,
+  NewTweetContainer,
+  PageTitle,
+  TweetList,
 } from './styles';
 
+interface ITweet {
+  _id: string
+  author: string
+  content: string
+}
+
 export default function Feed() {
+  const [tweets, setTweets] = useState<ITweet[]>([]);
+
+  async function getTweets() {
+    const response = await httpClient.graphql(`
+      query {
+        tweets {
+          _id
+          author
+          content
+        }
+      }
+    `);
+
+    setTweets(response.tweets);
+  }
+
+  useEffect(() => {
+    getTweets();
+  }, []);
+
   return (
     <Container>
       <PageTitle>Home</PageTitle>
@@ -13,62 +48,16 @@ export default function Feed() {
         <img src="http://github.com/eduardosouzv.png" alt="profile" />
         <TweetActions>
           <textarea placeholder="What's happening?" />
-          <TweetButton className="tweet" width={128} height={34}>Tweet</TweetButton>
+          <TweetButton className="tweet" width={128} height={34}>
+            Tweet
+          </TweetButton>
         </TweetActions>
       </NewTweetContainer>
 
       <TweetList>
-        <Tweet
-          author="Eduardo"
-          tweetContent="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Asperiores,
-         tempore iste dolore non praesentium sequi doloremque explicabo esse ducimus minus architecto ullam d
-         olores itaque omnis? Voluptate nihil harum aperiam esse."
-        />
-        <Tweet
-          author="Eduardo"
-          tweetContent="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Asperiores,
-         tempore iste dolore non praesentium sequi doloremque explicabo esse ducimus minus architecto ullam d
-         olores itaque omnis? Voluptate nihil harum aperiam esse."
-        />
-        <Tweet
-          author="Eduardo"
-          tweetContent="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Asperiores,
-         tempore iste dolore non praesentium sequi doloremque explicabo esse ducimus minus architecto ullam d
-         olores itaque omnis? Voluptate nihil harum aperiam esse."
-        />
-        <Tweet
-          author="Eduardo"
-          tweetContent="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Asperiores,
-         tempore iste dolore non praesentium sequi doloremque explicabo esse ducimus minus architecto ullam d
-         olores itaque omnis? Voluptate nihil harum aperiam esse."
-        />
-        <Tweet
-          author="Eduardo"
-          tweetContent="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Asperiores,
-         tempore iste dolore non praesentium sequi doloremque explicabo esse ducimus minus architecto ullam d
-         olores itaque omnis? Voluptate nihil harum aperiam esse."
-        />
-        <Tweet
-          author="Eduardo"
-          tweetContent="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Asperiores,
-         tempore iste dolore non praesentium sequi doloremque explicabo esse ducimus minus architecto ullam d
-         olores itaque omnis? Voluptate nihil harum aperiam esse."
-        />
-        <Tweet
-          author="Eduardo"
-          tweetContent="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Asperiores,
-         tempore iste dolore non praesentium sequi doloremque explicabo esse ducimus minus architecto ullam d
-         olores itaque omnis? Voluptate nihil harum aperiam esse."
-        />
-        <Tweet
-          author="Eduardo"
-          tweetContent="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Asperiores,
-         tempore iste dolore non praesentium sequi doloremque explicabo esse ducimus minus architecto ullam d
-         olores itaque omnis? Voluptate nihil harum aperiam esse."
-        />
-        <Tweet author="Eduardo" tweetContent="a okda okdoaksdo kkdoso" />
-        <Tweet author="Eduardo" tweetContent="a okda okdoaksdo kkdoso" />
-        <Tweet author="Eduardo" tweetContent="a okda okdoaksdo kkdoso" />
+        {tweets.map(({ _id, author, content }) => (
+          <Tweet key={_id} author={author} tweetContent={content} />
+        ))}
       </TweetList>
     </Container>
   );

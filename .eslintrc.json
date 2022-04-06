@@ -19,6 +19,8 @@
     "import/extensions": "off",
     "import/prefer-default-export": "off",
     "import/no-unresolved": "off",
-    "react/jsx-one-expression-per-line": "off"
+    "react/jsx-one-expression-per-line": "off",
+    "class-methods-use-this": "off",
+    "consistent-return": "off"
   }
 }
