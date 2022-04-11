@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { useQuery, gql, useMutation } from '@apollo/client';
 
 import Tweet from '../Tweet';
 import TweetButton from '../TweetButton';
-import httpClient from '../../services/utils/httpClient';
 
 import {
   Container,
@@ -19,36 +19,77 @@ interface ITweet {
   content: string
 }
 
-export default function Feed() {
-  const [tweets, setTweets] = useState<ITweet[]>([]);
-
-  async function getTweets() {
-    const response = await httpClient.graphql(`
-      query {
-        tweets {
-          _id
-          author
-          content
-        }
-      }
-    `);
-
-    setTweets(response.tweets);
+const GET_TWEETS = gql`
+  query {
+    tweets {
+      _id
+      author
+      content
+    }
   }
+`;
+
+const NEW_TWEET = gql`
+  mutation($author: String!, $content: String!) {
+    createTweet(author: $author, content: $content) {
+      _id
+      author
+      content
+    }
+  }
+`;
+
+export default function Feed() {
+  // TODO: set it with current user logged
+  const [currentUser] = useState<string>('souza');
+  const [tweets, setTweets] = useState<ITweet[]>([]);
+  const [tweetTextArea, setTweetTextArea] = useState<string>('');
+
+  const { loading, error, data } = useQuery<{tweets: ITweet[]}>(GET_TWEETS);
+  const [newTweet] = useMutation(NEW_TWEET);
 
   useEffect(() => {
-    getTweets();
-  }, []);
+    if (data) {
+      setTweets(data.tweets);
+    }
+  }, [data]);
+
+  async function handleNewTweet() {
+    const response = await newTweet({
+      variables: {
+        author: currentUser,
+        content: tweetTextArea,
+      },
+    });
+
+    const tweetCreated = response?.data?.createTweet;
+    const { _id, author, content } = tweetCreated;
+
+    setTweets((prev) => [{ _id, author, content }, ...prev]);
+    setTweetTextArea('');
+  }
+
+  function handleTweetTextareaChange(event: ChangeEvent<HTMLTextAreaElement>) {
+    setTweetTextArea(event.target.value);
+  }
 
   return (
     <Container>
       <PageTitle>Home</PageTitle>
-
       <NewTweetContainer>
         <img src="http://github.com/eduardosouzv.png" alt="profile" />
         <TweetActions>
-          <textarea placeholder="What's happening?" />
-          <TweetButton className="tweet" width={128} height={34}>
+          <textarea
+            placeholder="What's happening?"
+            onChange={handleTweetTextareaChange}
+            value={tweetTextArea}
+          />
+          <TweetButton
+            onClick={handleNewTweet}
+            className="tweet"
+            width={128}
+            height={34}
+          >
             Tweet
           </TweetButton>
         </TweetActions>
