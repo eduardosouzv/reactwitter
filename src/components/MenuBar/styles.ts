@@ -6,6 +6,8 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: space-between;
   height: 100vh;
+  position: sticky;
+  top: 0;
 `;
 
 export const Menu = styled.div`
