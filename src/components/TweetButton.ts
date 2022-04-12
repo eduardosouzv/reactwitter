@@ -16,9 +16,15 @@ export default styled.button<ISize>`
   color: ${({ theme }) => theme.colors.white};
   font-size: 18px;
   font-weight: bold;
+  transition: 0.5s;
 
   &:hover {
     opacity: 0.8;
-    transition: 0.5s;
+  }
+
+  &[disabled] {
+    background: ${({ theme }) => theme.colors.darkGray};
+    opacity: 0.4;
+    cursor: default;
   }
 `;

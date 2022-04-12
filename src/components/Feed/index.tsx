@@ -39,14 +39,21 @@ const NEW_TWEET = gql`
   }
 `;
 
+function delay(ms = 3000) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 export default function Feed() {
   // TODO: set it with current user logged
   const [currentUser] = useState<string>('souza');
   const [tweets, setTweets] = useState<ITweet[]>([]);
+  const [isPostingTweet, setIsPostingTweet] = useState<boolean>(false);
   const [tweetTextArea, setTweetTextArea] = useState<string>('');
 
-  const { loading, error, data } = useQuery<{tweets: ITweet[]}>(GET_TWEETS);
   const [newTweet] = useMutation(NEW_TWEET);
+  const { data } = useQuery<{tweets: ITweet[]}>(GET_TWEETS);
 
   useEffect(() => {
     if (data) {
@@ -55,6 +62,7 @@ export default function Feed() {
   }, [data]);
 
   async function handleNewTweet() {
+    setIsPostingTweet(true);
     const response = await newTweet({
       variables: {
         author: currentUser,
@@ -62,11 +70,14 @@ export default function Feed() {
       },
     });
 
+    await delay();
+
     const tweetCreated = response?.data?.createTweet;
     const { _id, author, content } = tweetCreated;
 
     setTweets((prev) => [{ _id, author, content }, ...prev]);
     setTweetTextArea('');
+    setIsPostingTweet(false);
   }
 
   function handleTweetTextareaChange(event: ChangeEvent<HTMLTextAreaElement>) {
@@ -89,6 +100,7 @@ export default function Feed() {
             className="tweet"
             width={128}
             height={34}
+            disabled={isPostingTweet}
           >
             Tweet
           </TweetButton>
