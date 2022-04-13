@@ -4,6 +4,11 @@ export const Container = styled.div`
   width: 600px;
   border-right: 1px solid ${({ theme }) => theme.colors.darkGray};
   border-left: 1px solid ${({ theme }) => theme.colors.darkGray};
+
+  .toaster {
+    background-color: ${({ theme }) => theme.colors.blue};
+    color: ${({ theme }) => theme.colors.white};
+  }
 `;
 
 export const PageTitle = styled.h1`

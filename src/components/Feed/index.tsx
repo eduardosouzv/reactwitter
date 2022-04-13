@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useQuery, gql, useMutation } from '@apollo/client';
+import toast, { Toaster } from 'react-hot-toast';
 
 import Tweet from '../Tweet';
 import TweetButton from '../TweetButton';
@@ -61,6 +62,11 @@ export default function Feed() {
     }
   }, [data]);
 
+  const notify = () => toast('Tweet enviado!', {
+    position: 'bottom-center',
+    className: 'toaster',
+  });
+
   async function handleNewTweet() {
     setIsPostingTweet(true);
     const response = await newTweet({
@@ -78,6 +84,7 @@ export default function Feed() {
     setTweets((prev) => [{ _id, author, content }, ...prev]);
     setTweetTextArea('');
     setIsPostingTweet(false);
+    notify();
   }
 
   function handleTweetTextareaChange(event: ChangeEvent<HTMLTextAreaElement>) {
@@ -112,6 +119,7 @@ export default function Feed() {
           <Tweet key={_id} author={author} tweetContent={content} />
         ))}
       </TweetList>
+      <Toaster />
     </Container>
   );
 }
