@@ -1,50 +1,86 @@
 /* eslint-disable no-unused-vars */
 import { ChangeEvent, useEffect, useState } from 'react';
-import { useQuery, gql, useMutation } from '@apollo/client';
+// import { useQuery, gql, useMutation } from '@apollo/client';
 import toast, { Toaster } from 'react-hot-toast';
 
-import Tweet from '../Tweet';
 import TweetButton from '../TweetButton';
 
-import {
-  Container,
-  TweetActions,
-  NewTweetContainer,
-  PageTitle,
-  TweetList,
-} from './styles';
-
 interface ITweet {
-  _id: string
-  author: string
-  content: string
+  _id: string;
+  author: string;
+  content: string;
 }
 
-const GET_TWEETS = gql`
-  query {
-    tweets {
-      _id
-      author
-      content
-    }
-  }
-`;
+// const GET_TWEETS = gql`
+//   query {
+//     tweets {
+//       _id
+//       author
+//       content
+//     }
+//   }
+// `;
 
-const NEW_TWEET = gql`
-  mutation($author: String!, $content: String!) {
-    createTweet(author: $author, content: $content) {
-      _id
-      author
-      content
-    }
-  }
-`;
+// const NEW_TWEET = gql`
+//   mutation ($author: String!, $content: String!) {
+//     createTweet(author: $author, content: $content) {
+//       _id
+//       author
+//       content
+//     }
+//   }
+// `;
 
 function delay(ms = 3000) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
+
+const data = {
+  tweets: [
+    {
+      _id: String(Math.random()),
+      author: 'eduardo',
+      content: 'string',
+    },
+    {
+      _id: String(Math.random()),
+      author: 'eduardo',
+      content: 'string',
+    },
+    {
+      _id: String(Math.random()),
+      author: 'eduardo',
+      content: 'string',
+    },
+    {
+      _id: String(Math.random()),
+      author: 'eduardo',
+      content: 'string',
+    },
+    {
+      _id: String(Math.random()),
+      author: 'eduardo',
+      content: 'string',
+    },
+    {
+      _id: String(Math.random()),
+      author: 'eduardo',
+      content: 'string',
+    },
+    {
+      _id: String(Math.random()),
+      author: 'eduardo',
+      content: 'string',
+    },
+    {
+      _id: String(Math.random()),
+      author: 'eduardo',
+      content: 'string',
+    },
+  ],
+};
 
 export default function Feed() {
   // TODO: set it with current user logged
@@ -53,8 +89,8 @@ export default function Feed() {
   const [isPostingTweet, setIsPostingTweet] = useState<boolean>(false);
   const [tweetTextArea, setTweetTextArea] = useState<string>('');
 
-  const [newTweet] = useMutation(NEW_TWEET);
-  const { data } = useQuery<{tweets: ITweet[]}>(GET_TWEETS);
+  // const [newTweet] = useMutation(NEW_TWEET);
+  // const { data } = useQuery<{tweets: ITweet[]}>(GET_TWEETS);
 
   useEffect(() => {
     if (data) {
@@ -64,26 +100,28 @@ export default function Feed() {
 
   const notify = () => toast('Tweet enviado!', {
     position: 'bottom-center',
-    className: 'toaster',
+    className: 'bg-blue-400 text-white',
   });
 
   async function handleNewTweet() {
-    setIsPostingTweet(true);
-    const response = await newTweet({
-      variables: {
-        author: currentUser,
-        content: tweetTextArea,
-      },
-    });
+    // setIsPostingTweet(true);
+    // const response = await newTweet({
+    //   variables: {
+    //     author: currentUser,
+    //     content: tweetTextArea,
+    //   },
+    // });
 
-    await delay();
+    // const response: any = {};
 
-    const tweetCreated = response?.data?.createTweet;
-    const { _id, author, content } = tweetCreated;
+    // await delay();
 
-    setTweets((prev) => [{ _id, author, content }, ...prev]);
-    setTweetTextArea('');
-    setIsPostingTweet(false);
+    // const tweetCreated = response?.data?.createTweet;
+    // const { _id, author, content } = tweetCreated;
+
+    // setTweets((prev) => [{ _id, author, content }, ...prev]);
+    // setTweetTextArea('');
+    // setIsPostingTweet(false);
     notify();
   }
 
@@ -92,34 +130,44 @@ export default function Feed() {
   }
 
   return (
-    <Container>
-      <PageTitle>Home</PageTitle>
-      <NewTweetContainer>
-        <img src="http://github.com/eduardosouzv.png" alt="profile" />
-        <TweetActions>
+    <div className="w-[600px] border-solid border-r-[1px] border-l-[1px] border-gray-800">
+      <h1 className="text-2xl p-4">Home</h1>
+      <div className="flex p-4 gap-2 border-gray-800 border-b-[1.5px]">
+        <img className="w-12 h-12 rounded-full" src="http://github.com/eduardosouzv.png" alt="profile" />
+        <div className="flex flex-col w-full">
           <textarea
+            className="bg-transparent resize-none text-base p-2 border-0
+            border-gray-800 border-b-[1.5px] overflow-auto focus:outline-none"
             placeholder="What's happening?"
             onChange={handleTweetTextareaChange}
             value={tweetTextArea}
           />
           <TweetButton
-            onClick={handleNewTweet}
-            className="tweet"
-            width={128}
-            height={34}
-            disabled={isPostingTweet}
+            className="w-32 h-10 mt-2 self-end"
           >
             Tweet
           </TweetButton>
-        </TweetActions>
-      </NewTweetContainer>
+        </div>
+      </div>
 
-      <TweetList>
+      <div>
         {tweets.map(({ _id, author, content }) => (
-          <Tweet key={_id} author={author} tweetContent={content} />
+          <div key={_id} className="flex gap-2 py-3 px-3 border-solid border-b-[1px] border-gray-800">
+            <img className="w-12 h-12 rounded-full" src="https://github.com/eduardosouzv.png" alt="" />
+            <div>
+              <span>
+                <strong>{author}</strong>
+                @souza
+              </span>
+
+              <div>
+                {content}
+              </div>
+            </div>
+          </div>
         ))}
-      </TweetList>
+      </div>
       <Toaster />
-    </Container>
+    </div>
   );
 }

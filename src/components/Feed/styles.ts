@@ -60,7 +60,3 @@ export const TweetActions = styled.div`
     }
   }
 `;
-
-export const TweetList = styled.div`
-  
-`;

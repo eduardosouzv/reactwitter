@@ -25,8 +25,7 @@ export default function MenuBar() {
         </Menu>
 
         <TweetButton
-          width={164}
-          height={48}
+          className="w-32 h-11"
         >
           Tweet
         </TweetButton>
