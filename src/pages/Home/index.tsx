@@ -1,13 +1,11 @@
-import { Container } from './styles';
-
 import MenuBar from '../../components/MenuBar';
 import Feed from '../../components/Feed';
 
 export default function Home() {
   return (
-    <Container>
+    <div className="flex justify-center my-0 mx-auto">
       <MenuBar />
       <Feed />
-    </Container>
+    </div>
   );
 }
