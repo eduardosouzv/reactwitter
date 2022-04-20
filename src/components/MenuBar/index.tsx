@@ -1,46 +1,46 @@
 import {
   FaHome, FaBell, FaReact, FaEnvelope, FaUserAlt,
 } from 'react-icons/fa';
-import {
-  Container, Menu, Icon, Profile,
-} from './styles';
 
 import TweetButton from '../TweetButton';
 import { MenuGroup } from '../MenuGroup';
 
 export default function MenuBar() {
   return (
-    <Container>
+    <div className="pt-6 pr-4 pb-6 pl-0 flex flex-col justify-between h-screen sticky top-0">
       <div>
-        <Icon>
+        <div className="flex cursor-default mx-4 select-none">
           <FaReact size={22} />
-          Reactwitter
-        </Icon>
+          <span className="ml-2">Reactwitter</span>
+        </div>
+        <div>
+          <div className="mt-8">
+            <MenuGroup icon={<FaHome size={22} />}>Home</MenuGroup>
+            <MenuGroup icon={<FaBell size={22} />}>Notifications</MenuGroup>
+            <MenuGroup icon={<FaEnvelope size={22} />}>Messages</MenuGroup>
+            <MenuGroup icon={<FaUserAlt size={22} />}>Profile</MenuGroup>
+          </div>
 
-        <Menu>
-          <MenuGroup icon={<FaHome size={22} />}>Home</MenuGroup>
-          <MenuGroup icon={<FaBell size={22} />}>Notifications</MenuGroup>
-          <MenuGroup icon={<FaEnvelope size={22} />}>Messages</MenuGroup>
-          <MenuGroup icon={<FaUserAlt size={22} />}>Profile</MenuGroup>
-        </Menu>
-
-        <TweetButton
-          className="w-32 h-11"
-        >
-          Tweet
-        </TweetButton>
+          <TweetButton
+            className="w-32 h-11"
+          >
+            Tweet
+          </TweetButton>
+        </div>
       </div>
 
-      <Profile>
+      <div className="flex">
         <img
           src="https://github.com/eduardosouzv.png"
           alt="profile"
+          className="rounded-full w-12"
         />
-        <div>
+        <div className="ml-3">
           <strong>eduardo</strong>
-          <p className="user">@souza</p>
+          <p className="text-gray-500">@souza</p>
         </div>
-      </Profile>
-    </Container>
+      </div>
+
+    </div>
   );
 }
