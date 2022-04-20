@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { ChangeEvent, useEffect, useState } from 'react';
-// import { useQuery, gql, useMutation } from '@apollo/client';
+import { useQuery, gql, useMutation } from '@apollo/client';
 import toast, { Toaster } from 'react-hot-toast';
 
 import TweetButton from '../TweetButton';
@@ -11,76 +11,31 @@ interface ITweet {
   content: string;
 }
 
-// const GET_TWEETS = gql`
-//   query {
-//     tweets {
-//       _id
-//       author
-//       content
-//     }
-//   }
-// `;
+const GET_TWEETS = gql`
+  query {
+    tweets {
+      _id
+      author
+      content
+    }
+  }
+`;
 
-// const NEW_TWEET = gql`
-//   mutation ($author: String!, $content: String!) {
-//     createTweet(author: $author, content: $content) {
-//       _id
-//       author
-//       content
-//     }
-//   }
-// `;
+const NEW_TWEET = gql`
+  mutation ($author: String!, $content: String!) {
+    createTweet(author: $author, content: $content) {
+      _id
+      author
+      content
+    }
+  }
+`;
 
 function delay(ms = 3000) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
-
-const data = {
-  tweets: [
-    {
-      _id: String(Math.random()),
-      author: 'eduardo',
-      content: 'string',
-    },
-    {
-      _id: String(Math.random()),
-      author: 'eduardo',
-      content: 'string',
-    },
-    {
-      _id: String(Math.random()),
-      author: 'eduardo',
-      content: 'string',
-    },
-    {
-      _id: String(Math.random()),
-      author: 'eduardo',
-      content: 'string',
-    },
-    {
-      _id: String(Math.random()),
-      author: 'eduardo',
-      content: 'string',
-    },
-    {
-      _id: String(Math.random()),
-      author: 'eduardo',
-      content: 'string',
-    },
-    {
-      _id: String(Math.random()),
-      author: 'eduardo',
-      content: 'string',
-    },
-    {
-      _id: String(Math.random()),
-      author: 'eduardo',
-      content: 'string',
-    },
-  ],
-};
 
 export default function Feed() {
   // TODO: set it with current user logged
@@ -89,8 +44,8 @@ export default function Feed() {
   const [isPostingTweet, setIsPostingTweet] = useState<boolean>(false);
   const [tweetTextArea, setTweetTextArea] = useState<string>('');
 
-  // const [newTweet] = useMutation(NEW_TWEET);
-  // const { data } = useQuery<{tweets: ITweet[]}>(GET_TWEETS);
+  const [newTweet] = useMutation(NEW_TWEET);
+  const { data } = useQuery<{tweets: ITweet[]}>(GET_TWEETS);
 
   useEffect(() => {
     if (data) {
@@ -104,24 +59,22 @@ export default function Feed() {
   });
 
   async function handleNewTweet() {
-    // setIsPostingTweet(true);
-    // const response = await newTweet({
-    //   variables: {
-    //     author: currentUser,
-    //     content: tweetTextArea,
-    //   },
-    // });
+    setIsPostingTweet(true);
+    const response = await newTweet({
+      variables: {
+        author: currentUser,
+        content: tweetTextArea,
+      },
+    });
 
-    // const response: any = {};
+    await delay();
 
-    // await delay();
+    const tweetCreated = response?.data?.createTweet;
+    const { _id, author, content } = tweetCreated;
 
-    // const tweetCreated = response?.data?.createTweet;
-    // const { _id, author, content } = tweetCreated;
-
-    // setTweets((prev) => [{ _id, author, content }, ...prev]);
-    // setTweetTextArea('');
-    // setIsPostingTweet(false);
+    setTweets((prev) => [{ _id, author, content }, ...prev]);
+    setTweetTextArea('');
+    setIsPostingTweet(false);
     notify();
   }
 
