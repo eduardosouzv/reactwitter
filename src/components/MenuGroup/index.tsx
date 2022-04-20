@@ -1,6 +1,5 @@
 import { ReactChild, ReactElement } from 'react';
 import { IconType } from 'react-icons/lib';
-import { Container } from './styles';
 
 interface IMenuGroup {
   children: ReactChild;
@@ -9,9 +8,11 @@ interface IMenuGroup {
 
 export function MenuGroup({ children, icon }: IMenuGroup) {
   return (
-    <Container>
-      {icon}
-      <span>{children}</span>
-    </Container>
+    <div className="cursor-pointer py-2 px-4 my-2 flex place-items-center gap-2
+    hover:bg-gray-500 rounded-2xl transition duration-300"
+    >
+      <div className="mr-4 text-2xl content-center">{icon}</div>
+      <span className="text-2xl">{children}</span>
+    </div>
   );
 }
