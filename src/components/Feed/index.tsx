@@ -41,7 +41,7 @@ export default function Feed() {
   // TODO: set it with current user logged
   const [currentUser] = useState<string>('souza');
   const [tweets, setTweets] = useState<ITweet[]>([]);
-  const [isPostingTweet, setIsPostingTweet] = useState<boolean>(false);
+  const [, setIsPostingTweet] = useState<boolean>(false);
   const [tweetTextArea, setTweetTextArea] = useState<string>('');
 
   const [newTweet] = useMutation(NEW_TWEET);
@@ -96,7 +96,8 @@ export default function Feed() {
             value={tweetTextArea}
           />
           <TweetButton
-            className="w-32 h-10 mt-2 self-end"
+            classNamePosition="w-32 h-10 mt-2 self-end"
+            onClick={handleNewTweet}
           >
             Tweet
           </TweetButton>
@@ -106,10 +107,10 @@ export default function Feed() {
       <div>
         {tweets.map(({ _id, author, content }) => (
           <div key={_id} className="flex gap-2 py-3 px-3 border-solid border-b-[1px] border-gray-800">
-            <img className="w-12 h-12 rounded-full" src="https://github.com/eduardosouzv.png" alt="" />
+            <img className="w-12 h-12 rounded-full mr-2" src="https://github.com/eduardosouzv.png" alt="" />
             <div>
               <span>
-                <strong>{author}</strong>
+                <strong className="mr-3">{author}</strong>
                 @souza
               </span>
 

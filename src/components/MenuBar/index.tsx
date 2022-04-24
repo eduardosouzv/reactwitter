@@ -22,7 +22,8 @@ export default function MenuBar() {
           </div>
 
           <TweetButton
-            className="w-32 h-11"
+            classNamePosition="w-32 h-11"
+            onClick={() => {}}
           >
             Tweet
           </TweetButton>
