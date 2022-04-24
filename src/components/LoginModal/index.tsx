@@ -1,8 +1,11 @@
 import ReactDOM from 'react-dom';
 
 import { AiOutlineClose } from 'react-icons/ai';
+import { useModal } from '../../hooks/useModal';
 
 export default function LoginModal() {
+  const { handleVisibility } = useModal();
+
   return (
     ReactDOM.createPortal(
       <div
@@ -12,9 +15,11 @@ export default function LoginModal() {
         <div className="p-4 w-[300px] h-[400px]">
           <div className="rounded-lg shadow-2xl shadow-gray-500 bg-black">
             <div className="flex justify-center p-2 items-center">
+              <span className="pl-3">Login</span>
 
               <button
                 type="button"
+                onClick={() => handleVisibility(false)}
                 className="text-gray-400 bg-transparent hover:bg-gray-200
                 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex
                 items-center dark:hover:bg-gray-800 dark:hover:text-white"
