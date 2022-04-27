@@ -1,9 +1,11 @@
-/* eslint-disable no-unused-vars */
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import toast, { Toaster } from 'react-hot-toast';
 
 import TweetButton from '../TweetButton';
+
+import defaultProfilePicture from '../../assets/default.png';
+import { useAuth } from '../../hooks/useAuth';
 
 interface ITweet {
   _id: string;
@@ -31,50 +33,36 @@ const NEW_TWEET = gql`
   }
 `;
 
-function delay(ms = 3000) {
+function delay(ms = 1500) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
 
 export default function Feed() {
-  // TODO: set it with current user logged
-  const [currentUser] = useState<string>('souza');
-  const [tweets, setTweets] = useState<ITweet[]>([]);
-  const [, setIsPostingTweet] = useState<boolean>(false);
+  const { currentUser } = useAuth();
   const [tweetTextArea, setTweetTextArea] = useState<string>('');
-
   const [newTweet] = useMutation(NEW_TWEET);
-  const { data } = useQuery<{tweets: ITweet[]}>(GET_TWEETS);
+  const { data, refetch: refetchTweets } = useQuery<{ tweets: ITweet[] }>(
+    GET_TWEETS
+  );
 
-  useEffect(() => {
-    if (data) {
-      setTweets(data.tweets);
-    }
-  }, [data]);
-
-  const notify = () => toast('Tweet enviado!', {
-    position: 'bottom-center',
-    className: 'bg-blue-400 text-white',
-  });
+  const notify = () =>
+    toast('Tweet enviado!', {
+      position: 'bottom-center',
+      className: 'bg-blue-400 text-white',
+    });
 
   async function handleNewTweet() {
-    setIsPostingTweet(true);
-    const response = await newTweet({
+    await newTweet({
       variables: {
         author: currentUser,
         content: tweetTextArea,
       },
     });
-
     await delay();
-
-    const tweetCreated = response?.data?.createTweet;
-    const { _id, author, content } = tweetCreated;
-
-    setTweets((prev) => [{ _id, author, content }, ...prev]);
+    await refetchTweets();
     setTweetTextArea('');
-    setIsPostingTweet(false);
     notify();
   }
 
@@ -86,7 +74,11 @@ export default function Feed() {
     <div className="w-[600px] border-solid border-r-[1px] border-l-[1px] border-gray-800">
       <h1 className="text-2xl p-4">Home</h1>
       <div className="flex p-4 gap-2 border-gray-800 border-b-[1.5px]">
-        <img className="w-12 h-12 rounded-full" src="http://github.com/eduardosouzv.png" alt="profile" />
+        <img
+          className="w-12 h-12 rounded-full"
+          src={defaultProfilePicture}
+          alt="profile"
+        />
         <div className="flex flex-col w-full">
           <textarea
             className="bg-transparent resize-none text-base p-2 border-0
@@ -105,18 +97,22 @@ export default function Feed() {
       </div>
 
       <div>
-        {tweets.map(({ _id, author, content }) => (
-          <div key={_id} className="flex gap-2 py-3 px-3 border-solid border-b-[1px] border-gray-800">
-            <img className="w-12 h-12 rounded-full mr-2" src="https://github.com/eduardosouzv.png" alt="" />
+        {data?.tweets.map(({ _id, author, content }) => (
+          <div
+            key={_id}
+            className="flex gap-2 py-3 px-3 border-solid border-b-[1px] border-gray-800"
+          >
+            <img
+              className="w-12 h-12 rounded-full mr-2"
+              src={defaultProfilePicture}
+              alt=""
+            />
             <div>
               <span>
-                <strong className="mr-3">{author}</strong>
-                @souza
+                <strong className="mr-3">{author}</strong>@{author}
               </span>
 
-              <div>
-                {content}
-              </div>
+              <div>{content}</div>
             </div>
           </div>
         ))}

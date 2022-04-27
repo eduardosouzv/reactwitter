@@ -1,16 +1,10 @@
-import { ApolloProvider } from '@apollo/client';
-
-import client from '../../services/utils/graphqlClient';
-
+import { useModal } from '../../hooks/useModal';
 import Home from '../../pages/Home';
-import { ModalProvider } from '../../hooks/useModal';
 
 export default function App() {
   return (
-    <ModalProvider>
-      <ApolloProvider client={client}>
-        <Home />
-      </ApolloProvider>
-    </ModalProvider>
+    <div>
+      <Home />
+    </div>
   );
 }
