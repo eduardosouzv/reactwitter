@@ -1,10 +1,15 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useModal } from '../../hooks/useModal';
 import Home from '../../pages/Home';
+import Login from '../../pages/Login';
 
 export default function App() {
   return (
-    <div>
-      <Home />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
