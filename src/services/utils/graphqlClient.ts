@@ -5,13 +5,23 @@ const httpLink = createHttpLink({
   uri: 'http://localhost:4000/graphql',
 });
 
+interface Data {
+  user: {
+    id: string;
+    username: string;
+  };
+  token: string;
+}
+
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('token');
+  const localStorageUser = localStorage.getItem('currentUser') || '';
+
+  const data: Data = JSON.parse(localStorageUser);
 
   return {
     headers: {
       ...headers,
-      authorization: token || '',
+      authorization: data.token || '',
     },
   };
 });
