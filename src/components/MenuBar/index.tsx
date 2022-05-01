@@ -1,11 +1,14 @@
-import {
-  FaHome, FaBell, FaReact, FaEnvelope, FaUserAlt,
-} from 'react-icons/fa';
+import { FaHome, FaBell, FaReact, FaEnvelope, FaUserAlt } from 'react-icons/fa';
 
 import TweetButton from '../TweetButton';
 import { MenuGroup } from '../MenuGroup';
 
+import { BiLogOut } from 'react-icons/bi';
+import { useAuth } from '../../hooks/useAuth';
+
 export default function MenuBar() {
+  const { logout } = useAuth();
+
   return (
     <div className="pt-6 pr-4 pb-6 pl-0 flex flex-col justify-between h-screen sticky top-0">
       <div>
@@ -21,14 +24,13 @@ export default function MenuBar() {
             <MenuGroup icon={<FaUserAlt size={22} />}>Profile</MenuGroup>
           </div>
 
-          <TweetButton
-            classNamePosition="w-32 h-11"
-            onClick={() => {}}
-          >
+          <TweetButton classNamePosition="w-32 h-11" onClick={() => {}}>
             Tweet
           </TweetButton>
         </div>
       </div>
+
+      <div className="text-white"></div>
 
       <div className="flex">
         <img
@@ -40,8 +42,13 @@ export default function MenuBar() {
           <strong>eduardo</strong>
           <p className="text-gray-500">@souza</p>
         </div>
+        <button
+          className="self-center pr-2 w-full active:outline-none focus:outline-none"
+          onClick={logout}
+        >
+          <BiLogOut className="ml-auto cursor-pointer" size={32} />
+        </button>
       </div>
-
     </div>
   );
 }

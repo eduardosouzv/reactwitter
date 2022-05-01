@@ -1,4 +1,4 @@
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { gql, useLazyQuery } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -13,10 +13,6 @@ type FormValues = {
 const AUTHENTICATE_USER = gql`
   query Login($username: String!, $password: String!) {
     loginUser(username: $username, password: $password) {
-      user {
-        id
-        username
-      }
       token
     }
   }
@@ -52,8 +48,9 @@ export default function Login() {
         },
       });
 
-      const { user, token } = data.loginUser;
-      localStorage.setItem('currentUser', JSON.stringify({ user, token }));
+      const { token } = data.loginUser;
+
+      localStorage.setItem('token', token);
 
       navigate('/');
     } catch {

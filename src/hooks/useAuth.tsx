@@ -1,8 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import { gql, useQuery } from '@apollo/client';
-import { createContext, ReactChild, useContext, useMemo } from 'react';
+import {
+  createContext,
+  ReactChild,
+  useContext,
+  useEffect,
+  useMemo,
+} from 'react';
 
 interface IAuthContext {
   currentUser: string;
+  logout: () => void;
 }
 
 const GET_CURRENT_USER = gql`
@@ -17,23 +25,25 @@ const GET_CURRENT_USER = gql`
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 export function AuthProvider({ children }: { children: ReactChild }) {
+  const navigate = useNavigate();
   const { data, loading, error } = useQuery(GET_CURRENT_USER);
-
   const currentUser = data?.getCurrentUser.username;
 
-  if (error) {
-    const unauthenticated = error.graphQLErrors.find(
-      (error) => error.extensions.code === 'UNAUTHENTICATED'
-    );
-
-    if (unauthenticated) {
-      console.log('UNAUTHENTICATED');
+  useEffect(() => {
+    if (error || !localStorage.getItem('token')) {
+      navigate('/login');
     }
+  }, [data]);
+
+  function logout() {
+    localStorage.removeItem('token');
+    navigate('/login');
   }
 
   const values = useMemo(
     () => ({
-      currentUser: loading ? '' : currentUser,
+      currentUser: loading && error ? '' : currentUser,
+      logout,
     }),
     [data]
   );

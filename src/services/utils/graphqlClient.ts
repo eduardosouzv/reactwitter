@@ -14,14 +14,12 @@ interface Data {
 }
 
 const authLink = setContext((_, { headers }) => {
-  const localStorageUser = localStorage.getItem('currentUser') || '';
-
-  const data: Data = JSON.parse(localStorageUser);
+  const token = localStorage.getItem('token') || '';
 
   return {
     headers: {
       ...headers,
-      authorization: data.token || '',
+      authorization: token || '',
     },
   };
 });

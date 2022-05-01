@@ -6,19 +6,19 @@ import App from './components/App';
 
 import './assets/styles/global.css';
 
-import { ModalProvider } from './hooks/useModal';
 import { AuthProvider } from './hooks/useAuth';
 
 import client from './services/utils/graphqlClient';
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <AuthProvider>
-        <ModalProvider>
+      <BrowserRouter>
+        <AuthProvider>
           <App />
-        </ModalProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
