@@ -9,7 +9,10 @@ import {
 } from 'react';
 
 interface IAuthContext {
-  currentUser: string;
+  user?: {
+    id: string;
+    name: string;
+  };
   logout: () => void;
 }
 
@@ -29,6 +32,17 @@ export function AuthProvider({ children }: { children: ReactChild }) {
   const { data, loading, error } = useQuery(GET_CURRENT_USER);
   const currentUser = data?.getCurrentUser.username;
 
+  const user: {
+    id: string;
+    name: string;
+  } = useMemo(
+    () => ({
+      id: data?.getCurrentUser.id,
+      name: data?.getCurrentUser.username,
+    }),
+    [data]
+  );
+
   useEffect(() => {
     if (error || !localStorage.getItem('token')) {
       navigate('/login');
@@ -42,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactChild }) {
 
   const values = useMemo(
     () => ({
-      currentUser: loading && error ? '' : currentUser,
+      user: loading && error ? { id: '', name: '' } : user,
       logout,
     }),
     [data]

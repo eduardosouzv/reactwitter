@@ -40,7 +40,7 @@ function delay(ms = 1500) {
 }
 
 export default function Feed() {
-  const { currentUser } = useAuth();
+  const { user } = useAuth();
   const [tweetTextArea, setTweetTextArea] = useState<string>('');
   const [newTweet] = useMutation(NEW_TWEET);
   const { data, refetch: refetchTweets } = useQuery<{ tweets: ITweet[] }>(
@@ -56,7 +56,7 @@ export default function Feed() {
   async function handleNewTweet() {
     await newTweet({
       variables: {
-        author: currentUser,
+        author: user?.name,
         content: tweetTextArea,
       },
     });

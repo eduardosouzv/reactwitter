@@ -7,7 +7,7 @@ import { useAuth } from '../../hooks/useAuth';
 import defaultProfilePicture from '../../assets/default.png';
 
 export default function MenuBar() {
-  const { logout, currentUser } = useAuth();
+  const { logout, user } = useAuth();
 
   return (
     <div className="pt-6 pr-4 pb-6 pl-0 flex flex-col justify-between h-screen sticky top-0">
@@ -35,7 +35,7 @@ export default function MenuBar() {
           className="rounded-full w-12"
         />
         <div className="ml-3">
-          <strong className="block">@{currentUser}</strong>
+          <strong className="block">@{user?.name}</strong>
           <button
             onClick={logout}
             className="text-gray-500 hover:text-red-400 cursor-pointer"
