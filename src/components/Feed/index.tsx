@@ -8,27 +8,31 @@ import defaultProfilePicture from '../../assets/default.png';
 import { useAuth } from '../../hooks/useAuth';
 
 interface ITweet {
-  _id: string;
-  author: string;
+  id: string;
+  author: {
+    id: string;
+    username: string;
+  };
   content: string;
 }
 
 const GET_TWEETS = gql`
-  query {
+  query Tweets {
     tweets {
-      _id
-      author
+      id
+      author {
+        id
+        username
+      }
       content
     }
   }
 `;
 
 const NEW_TWEET = gql`
-  mutation ($author: String!, $content: String!) {
-    createTweet(author: $author, content: $content) {
-      _id
-      author
-      content
+  mutation Tweet($authorId: String!, $content: String!) {
+    createTweet(authorId: $authorId, content: $content) {
+      id
     }
   }
 `;
@@ -56,7 +60,7 @@ export default function Feed() {
   async function handleNewTweet() {
     await newTweet({
       variables: {
-        author: user?.name,
+        authorId: user?.id,
         content: tweetTextArea,
       },
     });
@@ -97,9 +101,9 @@ export default function Feed() {
       </div>
 
       <div>
-        {data?.tweets.map(({ _id, author, content }) => (
+        {data?.tweets.map(({ id, author, content }) => (
           <div
-            key={_id}
+            key={id}
             className="flex gap-2 py-3 px-3 border-solid border-b-[1px] border-gray-800"
           >
             <img
@@ -108,7 +112,7 @@ export default function Feed() {
               alt=""
             />
             <div>
-              <strong className="mr-3">@{author}</strong>
+              <strong className="mr-3">@{author.username}</strong>
               <div>{content}</div>
             </div>
           </div>

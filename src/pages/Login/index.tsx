@@ -1,36 +1,22 @@
-import { gql, useLazyQuery } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
-
 import { FaReact } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+
+import { useAuth } from '../../hooks/useAuth';
 
 type FormValues = {
   username: string;
   password: string;
 };
 
-const AUTHENTICATE_USER = gql`
-  query Login($username: String!, $password: String!) {
-    loginUser(username: $username, password: $password) {
-      token
-    }
-  }
-`;
-
 export default function Login() {
-  const [authenticate, { loading }] = useLazyQuery(AUTHENTICATE_USER);
-  const navigate = useNavigate();
+  const { login } = useAuth();
 
   const notify = () =>
     toast.error('Tente novamente.', {
       position: 'bottom-center',
       className: 'bg-red-100 text-gray',
     });
-
-  if (loading) {
-    console.log('loading');
-  }
 
   const {
     register,
@@ -41,18 +27,7 @@ export default function Login() {
 
   async function onSubmit({ username, password }: FormValues) {
     try {
-      const { data } = await authenticate({
-        variables: {
-          username,
-          password,
-        },
-      });
-
-      const { token } = data.loginUser;
-
-      localStorage.setItem('token', token);
-
-      navigate('/');
+      await login({ username, password });
     } catch {
       setValue('username', '');
       setValue('password', '');
@@ -120,12 +95,9 @@ export default function Login() {
             >
               Sign In
             </button>
-            <a
-              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-              href="#"
-            >
+            <span className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
               Create account
-            </a>
+            </span>
           </div>
         </form>
         <Toaster />
