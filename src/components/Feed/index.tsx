@@ -108,10 +108,7 @@ export default function Feed() {
               alt=""
             />
             <div>
-              <span>
-                <strong className="mr-3">{author}</strong>@{author}
-              </span>
-
+              <strong className="mr-3">@{author}</strong>
               <div>{content}</div>
             </div>
           </div>
