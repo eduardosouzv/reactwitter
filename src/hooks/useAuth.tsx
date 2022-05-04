@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { gql, useLazyQuery, useQuery } from '@apollo/client';
+import { gql, useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import {
   createContext,
   ReactChild,
@@ -15,6 +15,7 @@ interface IAuthContext {
   };
   logout: () => void;
   login: ({ username, password }: LoginParam) => Promise<void>;
+  registerUser: ({ username, password }: LoginParam) => Promise<void>;
 }
 
 interface LoginParam {
@@ -43,6 +44,14 @@ const AUTHENTICATE_USER = gql`
   }
 `;
 
+const REGISTER_USER = gql`
+  mutation RegisterUser($username: String!, $password: String!) {
+    registerUser(username: $username, password: $password) {
+      token
+    }
+  }
+`;
+
 const AuthContext = createContext<IAuthContext>({} as IAuthContext);
 
 export function AuthProvider({ children }: { children: ReactChild }) {
@@ -55,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactChild }) {
     refetch,
   } = useQuery(GET_CURRENT_USER);
   const [authenticate] = useLazyQuery(AUTHENTICATE_USER);
+  const [register] = useMutation(REGISTER_USER);
 
   const user: IUser = useMemo(
     () => ({
@@ -64,11 +74,11 @@ export function AuthProvider({ children }: { children: ReactChild }) {
     [data]
   );
 
-  useEffect(() => {
-    if (error || !localStorage.getItem('token')) {
-      navigate('/login');
-    }
-  }, [data, navigate, error]);
+  // useEffect(() => {
+  //   if (error || !localStorage.getItem('token')) {
+  //     navigate('/login');
+  //   }
+  // }, [data, navigate, error]);
 
   function logout() {
     localStorage.removeItem('token');
@@ -89,11 +99,26 @@ export function AuthProvider({ children }: { children: ReactChild }) {
     refetch();
   }
 
+  async function registerUser({ username, password }: LoginParam) {
+    const { data } = await register({
+      variables: {
+        username,
+        password,
+      },
+    });
+
+    const { token } = data.registerUser;
+    localStorage.setItem('token', token);
+    navigate('/');
+    refetch();
+  }
+
   const values = useMemo(
     () => ({
       user: loadingCurrentUser && error ? { id: '', name: '' } : user,
       logout,
       login,
+      registerUser,
     }),
     [data]
   );

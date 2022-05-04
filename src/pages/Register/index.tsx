@@ -8,10 +8,11 @@ import { useAuth } from '../../hooks/useAuth';
 type FormValues = {
   username: string;
   password: string;
+  repeatPassword: string;
 };
 
-export default function Login() {
-  const { login } = useAuth();
+export default function Register() {
+  const { registerUser } = useAuth();
 
   const notify = () =>
     toast.error('Tente novamente.', {
@@ -24,11 +25,17 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
     setValue,
+    setError,
   } = useForm<FormValues>();
 
-  async function onSubmit({ username, password }: FormValues) {
+  async function onSubmit({ username, password, repeatPassword }: FormValues) {
     try {
-      await login({ username, password });
+      if (password !== repeatPassword) {
+        setError('password', { message: '' });
+        setError('repeatPassword', { message: 'asd' });
+        return;
+      }
+      await registerUser({ username, password });
     } catch {
       setValue('username', '');
       setValue('password', '');
@@ -38,7 +45,7 @@ export default function Login() {
 
   return (
     <div className="flex justify-center my-0 mx-auto w-2/5">
-      <aside className="h-screen w-2/4 flex justify-center items-center">
+      <aside className="h-screen w-2/4 flex justify-center items-center ">
         <FaReact size={128} className="animate-pulse" />
       </aside>
 
@@ -47,7 +54,7 @@ export default function Login() {
           onSubmit={handleSubmit(onSubmit)}
           className="px-8 pt-6 pb-8 mb-4 w-96"
         >
-          <h1 className="text-center text-5xl mb-4">Welcome!</h1>
+          <h1 className="text-center text-5xl mb-4">create account</h1>
 
           <div className="mb-4">
             <span className="block text-white text-sm font-bold mb-2">
@@ -55,7 +62,7 @@ export default function Login() {
             </span>
             <input
               className={`shadow appearance-none border rounded w-full py-2 px-3 mb-3 text-black leading-tight focus:outline-none focus:shadow-outline ${
-                errors.password && 'border-red-500'
+                errors.username && 'border-red-500'
               }`}
               id="username"
               type="text"
@@ -79,12 +86,29 @@ export default function Login() {
               id="password"
               type="password"
               placeholder="******************"
-              {...register('password', { required: true })}
+              {...register('password', { required: true, min: 4 })}
             />
-
-            {errors.password && (
+            {Boolean(errors.password && !errors.repeatPassword) && (
               <p className="text-red-500 text-xs italic">
                 Password is required
+              </p>
+            )}
+
+            <span className="block text-white text-sm font-bold mb-2">
+              Repeat Password
+            </span>
+            <input
+              className={`shadow appearance-none rounded w-full py-2 px-3 text-black mb-3 leading-tight focus:outline-none focus:shadow-outline border ${
+                errors.repeatPassword && 'border-red-500'
+              }`}
+              id="repeatPassword"
+              type="password"
+              placeholder="******************"
+              {...register('repeatPassword', { min: 4 })}
+            />
+            {errors.repeatPassword && (
+              <p className="text-red-500 text-xs italic">
+                Password should be equals
               </p>
             )}
           </div>
@@ -96,12 +120,15 @@ export default function Login() {
             >
               Sign In
             </button>
-            <Link
-              to="/register"
-              className="inline-block align-baseline font-bold text-sm text-gray-300 hover:text-gray-400"
-            >
-              Create account
-            </Link>
+            <span className="inline-block align-baseline font-bold text-sm text-gray-500">
+              Have account?
+              <Link
+                to="/login"
+                className="ml-1 text-gray-300 hover:text-gray-400"
+              >
+                Login
+              </Link>
+            </span>
           </div>
         </form>
         <Toaster />
