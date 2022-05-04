@@ -81,7 +81,9 @@ export default function Home() {
     notify('SUCCESS');
   }
 
-  function handleTweetTextareaChange(event: React.FormEvent<HTMLInputElement>) {
+  function handleTweetTextareaChange(
+    event: React.FormEvent<HTMLTextAreaElement>
+  ) {
     setTweetTextArea(event.currentTarget.value);
   }
 
@@ -89,7 +91,7 @@ export default function Home() {
     <div className="w-[600px] mx-auto">
       <FaReact size={64} className="mx-auto mt-4" />
 
-      <header className="text-center pb-3 border-b-[1px] border-gray-500 border-opacity-30">
+      <header className="text-center pb-3">
         <span className="block">@{user?.name}</span>
         <button
           onClick={logout}
@@ -99,13 +101,14 @@ export default function Home() {
         </button>
       </header>
 
-      <div className="border-b-[1px] border-gray-500 border-opacity-30">
-        <input
+      <div className="flex align-middle">
+        <textarea
           onChange={handleTweetTextareaChange}
           value={tweetTextArea}
-          type="text"
           placeholder="Type something here..."
-          className="bg-transparent p-3 placeholder:text-xs outline-none text-xs w-[80%]"
+          rows={3}
+          className="resize-none bg-transparent p-3 placeholder:text-xs outline-none focus:outline-none text-xs w-[80%]
+            border-[1px] border-gray-500 border-opacity-30 mt-2"
         />
         <button onClick={handleNewTweet} type="button" className="w-[20%] px-4">
           send it pls
