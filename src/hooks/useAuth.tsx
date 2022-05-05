@@ -16,6 +16,7 @@ interface IAuthContext {
   logout: () => void;
   login: ({ username, password }: LoginParam) => Promise<void>;
   registerUser: ({ username, password }: LoginParam) => Promise<void>;
+  isTokenOnClientValid: () => boolean;
 }
 
 interface LoginParam {
@@ -74,11 +75,12 @@ export function AuthProvider({ children }: { children: ReactChild }) {
     [data]
   );
 
-  // useEffect(() => {
-  //   if (error || !localStorage.getItem('token')) {
-  //     navigate('/login');
-  //   }
-  // }, [data, navigate, error]);
+  function isTokenOnClientValid() {
+    if (error || !localStorage.getItem('token')) {
+      return false;
+    }
+    return true;
+  }
 
   function logout() {
     localStorage.removeItem('token');
@@ -119,6 +121,7 @@ export function AuthProvider({ children }: { children: ReactChild }) {
       logout,
       login,
       registerUser,
+      isTokenOnClientValid,
     }),
     [data]
   );
