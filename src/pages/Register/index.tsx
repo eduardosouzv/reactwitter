@@ -118,10 +118,10 @@ export default function Register() {
               className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
-              Sign In
+              Register
             </button>
             <span className="inline-block align-baseline font-bold text-sm text-gray-500">
-              Have account?
+              Have an account?
               <Link
                 to="/login"
                 className="ml-1 text-gray-300 hover:text-gray-400"
