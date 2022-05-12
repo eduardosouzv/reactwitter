@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  db:
+    container_name: mongo
+    image: mongo
+    ports:
+      - '27017:27017'
+    logging:
+      driver: none
+  api:
+    container_name: api
+    build: ./api
+    environment:
+      MONGO_URI: mongodb://db/reactwitter
+    depends_on:
+      - db
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./api:/home/app/api
+  client:
+    container_name: client
+    build: ./frontend
+    depends_on:
+      - db
+    command: npm start
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend:/home/app/client
