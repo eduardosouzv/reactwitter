@@ -1,0 +1,23 @@
+type Author {
+  id: ID!
+  username: String
+}
+
+type Tweet {
+  id: ID!
+  author: Author
+  content: String!
+}
+
+type CreateTweetResponse {
+  id: ID!
+}
+
+type Query {
+  tweets: [Tweet!]!
+  tweetById(id: ID!): Tweet
+}
+
+type Mutation {
+  createTweet(authorId: String!, content: String!): CreateTweetResponse!
+}

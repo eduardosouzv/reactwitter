@@ -1,1 +1,3 @@
-# reactwitter
+docker-compose up
+
+be happy
