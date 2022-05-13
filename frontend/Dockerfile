@@ -1,6 +1,6 @@
-FROM node:13.12.0-alpine
+FROM node:16.5.0-alpine
 
-WORKDIR /app
+WORKDIR /home/app/client
 
 COPY package.json ./
 RUN npm install --silent
